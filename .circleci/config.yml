@@ -1,0 +1,33 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:latest
+    working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v4-{{ checksum "go.sum" }}
+      - run:
+          name: Update Mod
+          command: make update-mod
+      - save_cache:
+          key: go-mod-v4-{{ checksum "go.sum" }}
+          paths:
+            - "/go/pkg/mod"
+      - run:
+          name: Testing
+          command: make test
+      - run:
+          name: Build Release
+          command: make build-release
+      - run:
+          name: Run App
+          command: ./rabbitsky
+          background: true
+      - run:
+          name: Test Running App
+          command: |
+            sleep 5
+            curl --retry 10 --retry-delay 1 http://localhost:8080/channel/players
