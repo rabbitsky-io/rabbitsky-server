@@ -25,16 +25,16 @@ build-release-linux:
 	export CGO_ENABLED=0
 	export GOOS=linux
 	export GOARCH=amd64
-	@go build -v -a -installsuffix cgo -o rabbitsky .
+	@go build -v -a -installsuffix cgo -o rabbitsky-linux-amd64 .
 
 build-release-windows:
 	export CGO_ENABLED=0
 	export GOOS=windows
 	export GOARCH=amd64
-	@go build -v -a -installsuffix cgo -o rabbitsky.exe .
+	@go build -v -a -installsuffix cgo -o rabbitsky-windows-amd64.exe .
 
 build-release-darwin:
 	export CGO_ENABLED=0
 	export GOOS=darwin
 	export GOARCH=amd64
-	@go build -v -a -installsuffix cgo -o rabbitsky.exe .
+	@go build -v -a -installsuffix cgo -o rabbitsky-darwin-amd64 .

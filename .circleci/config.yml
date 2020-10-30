@@ -24,10 +24,10 @@ jobs:
           command: make build-release
       - run:
           name: Run App
-          command: ./rabbitsky
+          command: ./rabbitsky-linux-amd64
           background: true
       - run:
           name: Test Running App
           command: |
-            sleep 5
+            sleep 3
             curl --retry 10 --retry-delay 1 http://localhost:8080/channel/players
