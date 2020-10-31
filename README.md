@@ -1,6 +1,6 @@
 # Rabbit Sky - Server Side
 
-[![Rabbit Sky Server Status](https://circleci.com/gh/rabbitsky-io/rabbitsky-server.svg?style=shield)](https://circleci.com/gh/rabbitsky-io/rabbitsky-server)
+[![Rabbit Sky Server Status](https://circleci.com/gh/rabbitsky-io/rabbitsky-server/tree/master.svg?style=shield)](https://circleci.com/gh/rabbitsky-io/rabbitsky-server/tree/master)
 
 This is the Server Side / Part Two of the Rabbit Sky. It job is to run WebSocket server to connects all players.
 
