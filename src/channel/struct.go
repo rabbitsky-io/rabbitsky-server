@@ -13,6 +13,7 @@ type Channel struct {
 	MaxPlayers int
 	Players    cmap.ConcurrentMap
 	LastID     int
+	SkyColor   string
 
 	// Helper
 	Ticker           *time.Ticker

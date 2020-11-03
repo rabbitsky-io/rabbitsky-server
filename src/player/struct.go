@@ -7,6 +7,7 @@ import (
 type Player struct {
 	ID         string
 	WebSocket  *websocket.WebSocketConn
+	IsAdmin    bool
 	Ready      bool
 	ColorR     int
 	ColorG     int

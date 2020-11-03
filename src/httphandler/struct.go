@@ -6,9 +6,10 @@ import (
 )
 
 type HTTPHandler struct {
-	Channel   *channel.Channel
-	WebSocket *websocket.WebSocket
-	Origin    string
+	Channel        *channel.Channel
+	WebSocket      *websocket.WebSocket
+	Origin         string
+	ServerPassword string
 }
 
 type ChannelPlayersJSON struct {

@@ -115,6 +115,34 @@ func (h *HTTPHandler) ChannelJoin(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 
+			/* Chat parse command */
+			chat := messageSplit[8]
+			if chat != "" && chat[0] == '/' {
+				if h.ServerPassword != "" {
+					command := strings.Split(chat, " ")
+					if len(command) > 1 {
+						switch command[0] {
+						case "/admin":
+							if command[1] == h.ServerPassword {
+								player.IsAdmin = true
+							}
+							break
+						case "/sky":
+							if player.IsAdmin && command[1] != "" {
+								h.Channel.ChangeSkyColor(command[1])
+
+								broadcastMessage := fmt.Sprintf("%s,%s", SEND_SKY_COLOR, command[1])
+								h.Channel.AddBroadcastMessage(broadcastMessage)
+							}
+							break
+						}
+					}
+				}
+
+				// Delete!
+				messageSplit[8] = ""
+			}
+
 			broadcastMessage := fmt.Sprintf("%s,%s,%s", SEND_PLAYER_UPDATE, player.ID, strings.Join(messageSplit[1:], ","))
 			h.Channel.AddBroadcastMessage(broadcastMessage)
 
@@ -287,6 +315,11 @@ func (h *HTTPHandler) SendInit(player *rsPlayer.Player) error {
 
 			str.WriteString(sendText)
 		}
+	}
+
+	skyColor := h.Channel.GetSkyColor()
+	if skyColor != "" {
+		str.WriteString(fmt.Sprintf("%s,%s", SEND_SKY_COLOR, skyColor))
 	}
 
 	player.SendMessage(str.String())

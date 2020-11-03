@@ -7,7 +7,7 @@ import (
 	"rabbitsky/src/websocket"
 )
 
-func Init(c *channel.Channel, ws *websocket.WebSocket, origin string) (*HTTPHandler, error) {
+func Init(c *channel.Channel, ws *websocket.WebSocket, origin, serverPassword string) (*HTTPHandler, error) {
 	if c == nil {
 		return nil, errors.New("[Error] Init HTTP Handler Failed: Channel is nil!")
 	}
@@ -21,9 +21,10 @@ func Init(c *channel.Channel, ws *websocket.WebSocket, origin string) (*HTTPHand
 	}
 
 	httpHandler := HTTPHandler{
-		Channel:   c,
-		WebSocket: ws,
-		Origin:    origin,
+		Channel:        c,
+		WebSocket:      ws,
+		Origin:         origin,
+		ServerPassword: serverPassword,
 	}
 
 	return &httpHandler, nil

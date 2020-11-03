@@ -7,6 +7,7 @@ const (
 	SEND_PLAYER_DISCONNECT = "3"
 	SEND_DISCONNECT        = "9"
 	SEND_PING              = "P"
+	SEND_SKY_COLOR         = "S"
 
 	RECEIVE_PLAYER_INIT   = "0"
 	RECEIVE_PLAYER_UPDATE = "1"

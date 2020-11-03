@@ -24,6 +24,11 @@ func (c *Channel) CreatePlayer() (*player.Player, error) {
 	c.LastID++
 	id := c.LastID
 
+	if id > 9999999 {
+		c.LastID = 1
+		id = 1
+	}
+
 	player := player.Create()
 	player.ID = base62.Encode(id)
 
