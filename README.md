@@ -21,6 +21,7 @@ Please refer to [Release Page](https://github.com/rabbitsky-io/rabbitsky-server/
 | -tick | number | 10 | Server tick in Hz. How often the client and server communicate to each other. Please note that increasing the value will increase the usage of bandwidth for both client and server. We recommend to not increase or decrease the value. Increasing it to more than 30 can cause some problems, and we do not allow it to be set more than 60. |
 | -max-players | number | 100 | Maximum players this server can serve. Please note that the more players in the server, the more bandwidth is used by both the client and the server. Default is the best for both, increasing it to more than 250 can cause some problems.|
 | -origin | string | https://demo.rabbitsky.io | URL of the domain you use for the static file (rabbitsky-web). This is used for CORS. Please remember to input the scheme (http:// or https://) and remove trailing slash. |
+| -password | string |  | Set admin password to use slash command. Set it on in-game chat using /admin \[password\]. Leaving it empty will make slash command unusable. |
 
 ## Debug Parameter
 | Args     | Type | Default | Description |
@@ -58,5 +59,7 @@ Yes
 ## 3rd Party Module
 
 [catinello/base62](github.com/catinello/base62)
+
 [gorilla/websocket](github.com/gorilla/websocket)
+
 [orcaman/concurrent-map](github.com/orcaman/concurrent-map)
