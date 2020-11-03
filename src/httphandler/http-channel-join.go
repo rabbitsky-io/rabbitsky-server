@@ -319,6 +319,10 @@ func (h *HTTPHandler) SendInit(player *rsPlayer.Player) error {
 
 	skyColor := h.Channel.GetSkyColor()
 	if skyColor != "" {
+		if str.Len() > 0 {
+			str.WriteString("\n")
+		}
+
 		str.WriteString(fmt.Sprintf("%s,%s", SEND_SKY_COLOR, skyColor))
 	}
 
