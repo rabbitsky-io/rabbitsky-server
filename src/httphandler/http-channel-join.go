@@ -73,7 +73,11 @@ func (h *HTTPHandler) ChannelJoin(w http.ResponseWriter, r *http.Request) {
 		player.SetReadDeadline(wsTimeout)
 		player.SetWriteDeadline(wsTimeout)
 
-		messageSplit := strings.Split(message, ",")
+		if message == "" {
+			continue
+		}
+
+		messageSplit := strings.SplitN(message, ",", 2)
 
 		if len(messageSplit) <= 0 {
 			continue
@@ -84,14 +88,16 @@ func (h *HTTPHandler) ChannelJoin(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if messageSplit[0] == RECEIVE_PLAYER_INIT {
-			err = h.MessageInitPlayer(player, messageSplit)
+			messageSplitFormat := strings.SplitN(message, ",", 11)
+
+			err = h.MessageInitPlayer(player, messageSplitFormat)
 			if err != nil {
 				errDisconnect := fmt.Sprintf("%s,%s", SEND_DISCONNECT, err.Error())
 				player.DisconnectMessage(errDisconnect)
 				break
 			}
 
-			broadcastMessage := fmt.Sprintf("%s,%s,%s", SEND_PLAYER_INIT, player.ID, strings.Join(messageSplit[1:], ","))
+			broadcastMessage := fmt.Sprintf("%s,%s,%s", SEND_PLAYER_INIT, player.ID, strings.Join(messageSplitFormat[1:], ","))
 			h.Channel.AddBroadcastMessage(broadcastMessage)
 
 			player.Ready = true
@@ -110,40 +116,19 @@ func (h *HTTPHandler) ChannelJoin(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 
-			err = h.MessageUpdatePlayer(player, messageSplit)
+			messageSplitFormat := strings.SplitN(message, ",", 9)
+
+			err = h.MessageUpdatePlayer(player, messageSplitFormat)
 			if err != nil {
 				continue
 			}
 
 			/* Chat parse command */
-			chat := messageSplit[8]
-			if chat != "" && chat[0] == '/' {
-				if h.ServerPassword != "" {
-					command := strings.Split(chat, " ")
-					if len(command) > 1 {
-						switch command[0] {
-						case "/admin":
-							if command[1] == h.ServerPassword {
-								player.IsAdmin = true
-							}
-							break
-						case "/sky":
-							if player.IsAdmin && command[1] != "" {
-								h.Channel.ChangeSkyColor(command[1])
-
-								broadcastMessage := fmt.Sprintf("%s,%s", SEND_SKY_COLOR, command[1])
-								h.Channel.AddBroadcastMessage(broadcastMessage)
-							}
-							break
-						}
-					}
-				}
-
-				// Delete!
-				messageSplit[8] = ""
+			err = h.ParseCommand(player, messageSplitFormat[:])
+			if err != nil {
+				continue
 			}
-
-			broadcastMessage := fmt.Sprintf("%s,%s,%s", SEND_PLAYER_UPDATE, player.ID, strings.Join(messageSplit[1:], ","))
+			broadcastMessage := fmt.Sprintf("%s,%s,%s", SEND_PLAYER_UPDATE, player.ID, strings.Join(messageSplitFormat[1:], ","))
 			h.Channel.AddBroadcastMessage(broadcastMessage)
 
 			player.UpdateSent = true
@@ -152,6 +137,49 @@ func (h *HTTPHandler) ChannelJoin(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 	}
+}
+
+func (h *HTTPHandler) ParseCommand(player *rsPlayer.Player, data []string) error {
+	if player == nil {
+		return errors.New("Player is nil")
+	}
+
+	if len(data) != 9 {
+		return errors.New("Invalid Data")
+	}
+
+	chat := data[8]
+
+	if chat == "" {
+		return nil
+	}
+
+	if chat[0] == '/' {
+		data[8] = ""
+
+		if h.ServerPassword != "" {
+			command := strings.Split(chat, " ")
+			if len(command) > 1 {
+				switch command[0] {
+				case "/admin":
+					if command[1] == h.ServerPassword {
+						player.IsAdmin = true
+					}
+					break
+				case "/sky":
+					if player.IsAdmin && command[1] != "" {
+						h.Channel.ChangeSkyColor(command[1])
+
+						broadcastMessage := fmt.Sprintf("%s,%s", SEND_SKY_COLOR, command[1])
+						h.Channel.AddBroadcastMessage(broadcastMessage)
+					}
+					break
+				}
+			}
+		}
+	}
+
+	return nil
 }
 
 func (h *HTTPHandler) MessageInitPlayer(player *rsPlayer.Player, data []string) error {
