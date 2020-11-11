@@ -5,6 +5,8 @@ import (
 	"sync"
 	"time"
 
+	"rabbitsky/src/player"
+
 	cmap "github.com/orcaman/concurrent-map"
 )
 
@@ -14,6 +16,7 @@ type Channel struct {
 	Players    cmap.ConcurrentMap
 	LastID     int
 	SkyColor   string
+	Bots       []*player.Player
 
 	// Helper
 	Ticker           *time.Ticker

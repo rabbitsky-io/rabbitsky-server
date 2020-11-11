@@ -18,7 +18,7 @@ func main() {
 	serverTick := flag.Int("tick", 10, "Server tick in Hz, more tick equal more bandwidth. Best to leave it default.")
 	maxPlayers := flag.Int("max-players", 100, "Maximum Players in the server.")
 	origin := flag.String("origin", "https://demo.rabbitsky.io", "Hostname of the website you will serve the Static HTML. Please do remember to insert http:// or https:// for this to works.")
-	serverPassword := flag.String("password", "", "Admin password to allow user to use admin command. Set on chat using '/admin [password]'. Leaving it empty will make command unusable.")
+	serverPassword := flag.String("admin-password", "", "Admin password to allow user to use admin command. Set on chat using '/admin [password]'. Leaving it empty will make command unusable.")
 	addBots := flag.Int("add-bots", 0, "Spawn this number of bots to debug.")
 	flag.Parse()
 

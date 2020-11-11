@@ -24,9 +24,9 @@ func AddBot(c *rsChannel.Channel, maxBot, tick int) {
 	for i := 0; i < maxBot; i++ {
 		player, err := c.CreatePlayer()
 		if err == nil {
-			player.ColorR = rand.Intn(150) + 50
-			player.ColorG = rand.Intn(150) + 50
-			player.ColorB = rand.Intn(150) + 50
+			player.ColorH = rand.Intn(360)
+			player.ColorS = rand.Intn(100)
+			player.ColorL = rand.Intn(70) + 15
 			player.PosX = float64(2000 - rand.Intn(4000))
 			player.PosY = float64(10)
 			player.PosZ = float64(1500 - rand.Intn(3000))

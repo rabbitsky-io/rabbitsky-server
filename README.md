@@ -21,7 +21,7 @@ Please refer to [Release Page](https://github.com/rabbitsky-io/rabbitsky-server/
 | -tick | number | 10 | Server tick in Hz. How often the client and server communicate to each other. Please note that increasing the value will increase the usage of bandwidth for both client and server. We recommend to not increase or decrease the value. Increasing it to more than 30 can cause some problems, and we do not allow it to be set more than 60. |
 | -max-players | number | 100 | Maximum players this server can serve. Please note that the more players in the server, the more bandwidth is used by both the client and the server. Default is the best for both, increasing it to more than 250 can cause some problems.|
 | -origin | string | https://demo.rabbitsky.io | URL of the domain you use for the static file (rabbitsky-web). This is used for CORS. Please remember to input the scheme (http:// or https://) and remove trailing slash. |
-| -password | string |  | Set admin password to use slash command. Set it on in-game chat using /admin \[password\]. Leaving it empty will make slash command unusable. |
+| -admin-password | string |  | Set admin password to use slash command. Set it on in-game chat using /admin \[password\]. Leaving it empty will make slash command unusable. |
 
 ## Debug Parameter
 | Args     | Type | Default | Description |
@@ -32,6 +32,15 @@ Please refer to [Release Page](https://github.com/rabbitsky-io/rabbitsky-server/
 Sometime the server can crash during the event, so if you want it to be automatically restart when crash, you can create a script or service.
 
 If you're using Linux we recommend you to create your own service using systemd. Please refer to this post to start: [How to create systemd service?](https://linuxconfig.org/how-to-create-systemd-service-unit-in-linux).
+
+## In Game Chat Command
+| Command | Description |
+| ------- | ----------- |
+| /admin \[password\] | Set the admin password for the server. If the admin password is valid, you are marked as admin and can do other commands below. |
+| /sky \[color\] | Set the sky color of the server. Color can be HEX, RGB, HSL or valid color name like blue, red, white etc. |
+| /skyflash \[time tick\] \(time fade\) \[color1\] \[color2\] \(color3\) \(color4\) | Set the sky color of the server, but with continues changing every time tick. Time is in Milliseconds. Best to use HEX color instead of RBG, HSL, or valid color name. Time fade, color 3 and color 4 are optional. Time fade is how fast the transition between two colors. Set time fade to 0 if you do not want to use transition. If time fade is empty, fade is set to be the same value as time tick. |
+| /botadd | Add bot to your position, also fill the server. |
+| /botremove | Remove all bots created. |
 
 ## Making Your Own Build
 It's relatively easy. We created a Makefile just for that! All you have to do is to have golang on your PC / Mac. [Click here to see how to install golang](https://golang.org/doc/install).

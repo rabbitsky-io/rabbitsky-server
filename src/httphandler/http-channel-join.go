@@ -159,12 +159,13 @@ func (h *HTTPHandler) ParseCommand(player *rsPlayer.Player, data []string) error
 
 		if h.ServerPassword != "" {
 			command := strings.Split(chat, " ")
-			if len(command) > 1 {
+			if len(command) > 0 {
 				switch command[0] {
 				case "/admin":
 					if command[1] == h.ServerPassword {
 						player.IsAdmin = true
 					}
+
 					break
 				case "/sky":
 					if player.IsAdmin && command[1] != "" {
@@ -173,6 +174,74 @@ func (h *HTTPHandler) ParseCommand(player *rsPlayer.Player, data []string) error
 						broadcastMessage := fmt.Sprintf("%s,%s", SEND_SKY_COLOR, command[1])
 						h.Channel.AddBroadcastMessage(broadcastMessage)
 					}
+
+					break
+				case "/skyflash":
+					if player.IsAdmin && len(command) > 2 {
+						_, err := strconv.Atoi(command[1])
+						if err != nil {
+							break
+						}
+
+						commandSaveArr := []string{SEND_SKY_COLOR_FLASH}
+
+						_, err = strconv.Atoi(command[2])
+						if err == nil {
+							commandSaveArr = append(commandSaveArr, command[1:]...)
+						} else {
+							commandSaveArr = append(commandSaveArr, command[1])
+							commandSaveArr = append(commandSaveArr, command[1:]...)
+						}
+
+						commandJoin := strings.Join(commandSaveArr, ",")
+						h.Channel.ChangeSkyColor(commandJoin)
+
+						broadcastMessage := fmt.Sprintf("%s,%s", SEND_SKY_COLOR, commandJoin)
+						h.Channel.AddBroadcastMessage(broadcastMessage)
+					}
+
+					break
+				case "/botadd":
+					if player.IsAdmin {
+						bot, err := h.Channel.CreateBot(player)
+						if err != nil {
+							break
+						}
+
+						broadcastMessage := fmt.Sprintf("%s,%s,%d,%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d",
+							SEND_PLAYER_INIT,
+							bot.ID,
+							bot.ColorH,
+							bot.ColorS,
+							bot.ColorL,
+							bot.PosX,
+							bot.PosY,
+							bot.PosZ,
+							bot.LookX,
+							bot.LookY,
+							bot.LookZ,
+							0,
+						)
+
+						h.Channel.AddBroadcastMessage(broadcastMessage)
+					}
+
+					break
+				case "/botremove":
+					if player.IsAdmin {
+						bots, err := h.Channel.GetBots()
+						if err != nil {
+							break
+						}
+
+						err = h.Channel.RemoveBots()
+
+						for _, bot := range bots {
+							broadcastMessage := fmt.Sprintf("%s,%s", SEND_PLAYER_DISCONNECT, bot.ID)
+							h.Channel.AddBroadcastMessage(broadcastMessage)
+						}
+					}
+
 					break
 				}
 			}
@@ -195,16 +264,16 @@ func (h *HTTPHandler) MessageInitPlayer(player *rsPlayer.Player, data []string) 
 		return errors.New("Found empty data on init")
 	}
 
-	if colorR, err := strconv.Atoi(data[1]); err == nil {
-		player.ColorR = colorR
+	if colorH, err := strconv.Atoi(data[1]); err == nil {
+		player.ColorH = colorH
 	}
 
-	if colorG, err := strconv.Atoi(data[2]); err == nil {
-		player.ColorG = colorG
+	if colorS, err := strconv.Atoi(data[2]); err == nil {
+		player.ColorS = colorS
 	}
 
-	if colorB, err := strconv.Atoi(data[3]); err == nil {
-		player.ColorB = colorB
+	if colorL, err := strconv.Atoi(data[3]); err == nil {
+		player.ColorL = colorL
 	}
 
 	if posX, err := strconv.ParseFloat(data[4], 64); err == nil {
@@ -323,11 +392,12 @@ func (h *HTTPHandler) SendInit(player *rsPlayer.Player) error {
 				isDuck = 1
 			}
 
-			sendText := fmt.Sprintf("1,%s,%d,%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d",
+			sendText := fmt.Sprintf("%s,%s,%d,%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d",
+				SEND_PLAYER_INIT,
 				playerObj.ID,
-				playerObj.ColorR,
-				playerObj.ColorG,
-				playerObj.ColorB,
+				playerObj.ColorH,
+				playerObj.ColorS,
+				playerObj.ColorL,
 				playerObj.PosX,
 				playerObj.PosY,
 				playerObj.PosZ,

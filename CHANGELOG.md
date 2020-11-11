@@ -1,5 +1,10 @@
 # Rabbit Sky Server Changelog
 
+## Version 0.1.4
+- Add More Commands, /skyflash to change the color of the sky, flashing. /botadd to fill the server with bot that doing nothing, and /botremove to remove all the bots.
+- Change players color from RGB to HSL instead.
+- Change -password to -admin-password. We planned to use -password for password protected server like VIP only or something.
+
 ## Version 0.1.3
 - Fix chat - when using comma, chat got cut
 

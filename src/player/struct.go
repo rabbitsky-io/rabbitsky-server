@@ -9,9 +9,9 @@ type Player struct {
 	WebSocket  *websocket.WebSocketConn
 	IsAdmin    bool
 	Ready      bool
-	ColorR     int
-	ColorG     int
-	ColorB     int
+	ColorH     int
+	ColorS     int
+	ColorL     int
 	PosX       float64
 	PosY       float64
 	PosZ       float64
