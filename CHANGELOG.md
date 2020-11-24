@@ -1,5 +1,8 @@
 # Rabbit Sky Server Changelog
 
+## Version 0.1.5
+- Change position to INT instead of FLOAT, saving bandwidth.
+
 ## Version 0.1.4
 - Add More Commands, /skyflash to change the color of the sky, flashing. /botadd to fill the server with bot that doing nothing, and /botremove to remove all the bots.
 - Change players color from RGB to HSL instead.

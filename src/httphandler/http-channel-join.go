@@ -208,7 +208,7 @@ func (h *HTTPHandler) ParseCommand(player *rsPlayer.Player, data []string) error
 							break
 						}
 
-						broadcastMessage := fmt.Sprintf("%s,%s,%d,%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d",
+						broadcastMessage := fmt.Sprintf("%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
 							SEND_PLAYER_INIT,
 							bot.ID,
 							bot.ColorH,
@@ -276,27 +276,27 @@ func (h *HTTPHandler) MessageInitPlayer(player *rsPlayer.Player, data []string) 
 		player.ColorL = colorL
 	}
 
-	if posX, err := strconv.ParseFloat(data[4], 64); err == nil {
+	if posX, err := strconv.Atoi(data[4]); err == nil {
 		player.PosX = posX
 	}
 
-	if posY, err := strconv.ParseFloat(data[5], 64); err == nil {
+	if posY, err := strconv.Atoi(data[5]); err == nil {
 		player.PosY = posY
 	}
 
-	if posZ, err := strconv.ParseFloat(data[6], 64); err == nil {
+	if posZ, err := strconv.Atoi(data[6]); err == nil {
 		player.PosZ = posZ
 	}
 
-	if LookX, err := strconv.ParseFloat(data[7], 64); err == nil {
+	if LookX, err := strconv.Atoi(data[7]); err == nil {
 		player.LookX = LookX
 	}
 
-	if LookY, err := strconv.ParseFloat(data[8], 64); err == nil {
+	if LookY, err := strconv.Atoi(data[8]); err == nil {
 		player.LookY = LookY
 	}
 
-	if LookZ, err := strconv.ParseFloat(data[9], 64); err == nil {
+	if LookZ, err := strconv.Atoi(data[9]); err == nil {
 		player.LookZ = LookZ
 	}
 
@@ -323,37 +323,37 @@ func (h *HTTPHandler) MessageUpdatePlayer(player *rsPlayer.Player, data []string
 	}
 
 	if data[1] != "" {
-		if posX, err := strconv.ParseFloat(data[1], 64); err == nil {
+		if posX, err := strconv.Atoi(data[1]); err == nil {
 			player.PosX = posX
 		}
 	}
 
 	if data[2] != "" {
-		if posY, err := strconv.ParseFloat(data[2], 64); err == nil {
+		if posY, err := strconv.Atoi(data[2]); err == nil {
 			player.PosY = posY
 		}
 	}
 
 	if data[3] != "" {
-		if posZ, err := strconv.ParseFloat(data[3], 64); err == nil {
+		if posZ, err := strconv.Atoi(data[3]); err == nil {
 			player.PosZ = posZ
 		}
 	}
 
 	if data[4] != "" {
-		if LookX, err := strconv.ParseFloat(data[4], 64); err == nil {
+		if LookX, err := strconv.Atoi(data[4]); err == nil {
 			player.LookX = LookX
 		}
 	}
 
 	if data[5] != "" {
-		if LookY, err := strconv.ParseFloat(data[5], 64); err == nil {
+		if LookY, err := strconv.Atoi(data[5]); err == nil {
 			player.LookY = LookY
 		}
 	}
 
 	if data[6] != "" {
-		if LookZ, err := strconv.ParseFloat(data[6], 64); err == nil {
+		if LookZ, err := strconv.Atoi(data[6]); err == nil {
 			player.LookZ = LookZ
 		}
 	}
@@ -392,7 +392,7 @@ func (h *HTTPHandler) SendInit(player *rsPlayer.Player) error {
 				isDuck = 1
 			}
 
-			sendText := fmt.Sprintf("%s,%s,%d,%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d",
+			sendText := fmt.Sprintf("%s,%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
 				SEND_PLAYER_INIT,
 				playerObj.ID,
 				playerObj.ColorH,

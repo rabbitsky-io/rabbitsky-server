@@ -12,12 +12,12 @@ type Player struct {
 	ColorH     int
 	ColorS     int
 	ColorL     int
-	PosX       float64
-	PosY       float64
-	PosZ       float64
-	LookX      float64
-	LookY      float64
-	LookZ      float64
+	PosX       int
+	PosY       int
+	PosZ       int
+	LookX      int
+	LookY      int
+	LookZ      int
 	IsDuck     bool
 	Chat       string
 	UpdateSent bool
