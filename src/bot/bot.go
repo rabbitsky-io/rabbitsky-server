@@ -27,12 +27,12 @@ func AddBot(c *rsChannel.Channel, maxBot, tick int) {
 			player.ColorH = rand.Intn(360)
 			player.ColorS = rand.Intn(100)
 			player.ColorL = rand.Intn(70) + 15
-			player.PosX = 2000 - rand.Intn(4000)
+			player.PosX = rand.Intn(4000)
 			player.PosY = 10
-			player.PosZ = 1500 - rand.Intn(3000)
-			player.LookX = 0
+			player.PosZ = rand.Intn(3000)
+			player.LookX = 2100
 			player.LookY = 1000
-			player.LookZ = 3000
+			player.LookZ = 6000
 			player.IsDuck = false
 			player.Ready = true
 
@@ -46,20 +46,20 @@ func AddBot(c *rsChannel.Channel, maxBot, tick int) {
 	for ; true; <-ticker.C {
 		for i := 0; i < maxBot; i++ {
 			playerBot[i].PosX = playerBot[i].PosX + (25 - rand.Intn(50))
-			if playerBot[i].PosX > 2000 {
-				playerBot[i].PosX = 2000
+			if playerBot[i].PosX > 4000 {
+				playerBot[i].PosX = 4000
 			}
-			if playerBot[i].PosX < -2000 {
-				playerBot[i].PosX = -2000
+			if playerBot[i].PosX < 0 {
+				playerBot[i].PosX = 0
 			}
 
 			playerBot[i].PosY = rand.Intn(5) + 10
 			playerBot[i].PosZ = playerBot[i].PosZ + (25 - rand.Intn(50))
-			if playerBot[i].PosZ > 1500 {
-				playerBot[i].PosZ = 1500
+			if playerBot[i].PosZ > 3000 {
+				playerBot[i].PosZ = 3000
 			}
-			if playerBot[i].PosZ < -1500 {
-				playerBot[i].PosZ = -1500
+			if playerBot[i].PosZ < 0 {
+				playerBot[i].PosZ = 0
 			}
 
 			if rand.Intn(25) == 0 {
@@ -76,7 +76,7 @@ func AddBot(c *rsChannel.Channel, maxBot, tick int) {
 				playerBot[i].IsDuck = true
 			}
 
-			sendText := fmt.Sprintf("%s,%s,%d,%d,%d,%d,%d,%d,%d,%s",
+			sendText := fmt.Sprintf("%s%s=X%dY%dZ%dx%dy%dz%dD%dC%s",
 				rsHTTPHandler.SEND_PLAYER_UPDATE,
 				playerBot[i].ID,
 				playerBot[i].PosX,
