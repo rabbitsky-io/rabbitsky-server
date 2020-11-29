@@ -22,6 +22,8 @@ Please refer to [Release Page](https://github.com/rabbitsky-io/rabbitsky-server/
 | -max-players | number | 100 | Maximum players this server can serve. Please note that the more players in the server, the more bandwidth is used by both the client and the server. Default is the best for both, increasing it to more than 250 can cause some problems.|
 | -origin | string | https://demo.rabbitsky.io | URL of the domain you use for the static file (rabbitsky-web). This is used for CORS. Please remember to input the scheme (http:// or https://) and remove trailing slash. |
 | -admin-password | string |  | Set admin password to use slash command. Set it on in-game chat using /admin \[password\]. Leaving it empty will make slash command unusable. |
+| -limit-position-min | string | 0,0,0 | Set player limit minimum of player position. If position less than this limit, user will be disconnected. Format is `X,Y,Z`. |
+| -limit-position-max | string | 4000,100,3000 | Set player limit maximum of player position. If position more than this limit, user will be disconnected. Format is `X,Y,Z`. |
 
 ## Debug Parameter
 | Args     | Type | Default | Description |
@@ -37,6 +39,7 @@ If you're using Linux we recommend you to create your own service using systemd.
 | Command | Description |
 | ------- | ----------- |
 | /admin \[password\] | Set the admin password for the server. If the admin password is valid, you are marked as admin and can do other commands below. |
+| /fly on|off | Enable flying for current player. To enable you can use `/fly` or `/fly on`, and to disable you can use `/fly off`. |
 | /sky \[color\] | Set the sky color of the server. Color can be HEX, RGB, HSL or valid color name like blue, red, white etc. |
 | /skyflash \[time tick\] \(time fade\) \[color1\] \[color2\] \(color3\) \(color4\) | Set the sky color of the server, but with continues changing every time tick. Time is in Milliseconds. Best to use HEX color instead of RBG, HSL, or valid color name. Time fade, color 3 and color 4 are optional. Time fade is how fast the transition between two colors. Set time fade to 0 if you do not want to use transition. If time fade is empty, fade is set to be the same value as time tick. |
 | /botadd | Add bot to your position, also fill the server. |

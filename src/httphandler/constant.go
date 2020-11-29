@@ -7,6 +7,7 @@ const (
 	SEND_PLAYER_DISCONNECT = "3"
 	SEND_DISCONNECT        = "9"
 	SEND_PING              = "P"
+	SEND_ALLOW_FLY         = "F"
 
 	SEND_SKY_COLOR          = "S"
 	SEND_SKY_COLOR_STANDARD = "S"

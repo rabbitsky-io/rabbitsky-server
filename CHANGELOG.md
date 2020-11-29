@@ -1,5 +1,10 @@
 # Rabbit Sky Server Changelog
 
+## Version 0.1.6
+- Add detection to non-admin player if more or less than limit, user should be disconnected.
+- Add flag `-limit-position-max` and `limit-position-min` to support the detection.
+- Admin now can use `/fly on` to fly, and `/fly off` to cancel flying.
+
 ## Version 0.1.5
 - Change position to INT instead of FLOAT, saving bandwidth.
 - New Message Format, using regex, saving bandwidth.

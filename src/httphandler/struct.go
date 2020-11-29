@@ -13,6 +13,15 @@ type HTTPHandler struct {
 	Origin         string
 	ServerPassword string
 	MessageRegex   *regexp.Regexp
+
+	PositionLimitMin *Position
+	PositionLimitMax *Position
+}
+
+type Position struct {
+	X int
+	Y int
+	Z int
 }
 
 type ChannelPlayersJSON struct {

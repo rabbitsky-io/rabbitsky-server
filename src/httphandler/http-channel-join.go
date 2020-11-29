@@ -111,6 +111,13 @@ func (h *HTTPHandler) ChannelJoin(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 
+			err = h.DetectPosition(player)
+			if err != nil {
+				errDisconnect := fmt.Sprintf("%s%s", SEND_DISCONNECT, err.Error())
+				player.DisconnectMessage(errDisconnect)
+				break
+			}
+
 			unparsedData := h.UnparseMessageData(parsedData)
 			if unparsedData == "" {
 				continue
@@ -156,6 +163,13 @@ func (h *HTTPHandler) ChannelJoin(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 
+			err = h.DetectPosition(player)
+			if err != nil {
+				errDisconnect := fmt.Sprintf("%s%s", SEND_DISCONNECT, err.Error())
+				player.DisconnectMessage(errDisconnect)
+				break
+			}
+
 			/* Chat parse command */
 			h.ParseCommand(player, parsedData)
 
@@ -199,13 +213,25 @@ func (h *HTTPHandler) ParseCommand(player *rsPlayer.Player, data map[string]stri
 	if len(command) > 0 {
 		switch command[0] {
 		case "/admin":
-			if command[1] == h.ServerPassword {
+			if len(command) > 1 && command[1] == h.ServerPassword {
 				player.IsAdmin = true
 			}
 
 			break
+		case "/fly":
+			if player.IsAdmin {
+				if len(command) == 1 || command[1] == "" || command[1] == "1" || strings.ToLower(command[1]) == "on" {
+					sendFly := fmt.Sprintf("%s%d", SEND_ALLOW_FLY, 1)
+					player.SendMessage(sendFly)
+				} else {
+					sendFly := fmt.Sprintf("%s%d", SEND_ALLOW_FLY, 0)
+					player.SendMessage(sendFly)
+				}
+			}
+
+			break
 		case "/sky":
-			if player.IsAdmin && command[1] != "" {
+			if player.IsAdmin && len(command) > 1 && command[1] != "" {
 				skySend := fmt.Sprintf("%s%s", SEND_SKY_COLOR_STANDARD, command[1])
 				h.Channel.ChangeSkyColor(skySend)
 
@@ -470,7 +496,7 @@ func (h *HTTPHandler) ParseMessageData(str string) (map[string]string, error) {
 
 	regexMatch := h.MessageRegex.FindStringSubmatch(str)
 	if len(regexMatch) == 0 {
-		return nil, errors.New("Data not match")
+		return nil, errors.New("PAGERELOAD")
 	}
 
 	playerData := map[string]string{}
@@ -510,4 +536,46 @@ func (h *HTTPHandler) UnparseMessageData(data map[string]string) string {
 	}
 
 	return str.String()
+}
+
+func (h *HTTPHandler) DetectPosition(player *rsPlayer.Player) error {
+	if player == nil {
+		return errors.New("Player is nil")
+	}
+
+	if player.IsAdmin {
+		return nil
+	}
+
+	isAnomaly := false
+
+	if player.PosX < h.PositionLimitMin.X {
+		isAnomaly = true
+	}
+
+	if player.PosY < h.PositionLimitMin.Y {
+		isAnomaly = true
+	}
+
+	if player.PosZ < h.PositionLimitMin.Z {
+		isAnomaly = true
+	}
+
+	if player.PosX > h.PositionLimitMax.X {
+		isAnomaly = true
+	}
+
+	if player.PosY > h.PositionLimitMax.Y {
+		isAnomaly = true
+	}
+
+	if player.PosZ > h.PositionLimitMax.Z {
+		isAnomaly = true
+	}
+
+	if isAnomaly {
+		return errors.New("PAGERELOAD")
+	}
+
+	return nil
 }
