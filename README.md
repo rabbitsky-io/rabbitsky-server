@@ -40,8 +40,10 @@ If you're using Linux we recommend you to create your own service using systemd.
 | ------- | ----------- |
 | /admin \[password\] | Set the admin password for the server. If the admin password is valid, you are marked as admin and can do other commands below. |
 | /fly on|off | Enable flying for current player. To enable you can use `/fly` or `/fly on`, and to disable you can use `/fly off`. |
+| /size \[number\] | Set the size of player. Default is 1. Range 1-9. |
 | /sky \[color\] | Set the sky color of the server. Color can be HEX, RGB, HSL or valid color name like blue, red, white etc. |
-| /skyflash \[time tick\] \(time fade\) \[color1\] \[color2\] \(color3\) \(color4\) | Set the sky color of the server, but with continues changing every time tick. Time is in Milliseconds. Best to use HEX color instead of RBG, HSL, or valid color name. Time fade, color 3 and color 4 are optional. Time fade is how fast the transition between two colors. Set time fade to 0 if you do not want to use transition. If time fade is empty, fade is set to be the same value as time tick. |
+| /skyflash \[time tick\] \(time fade\) \[color1\] \[color2\] \(color3\) \(color4\) | Set the sky color of the server, but with continues changing every time tick. Time is in Milliseconds. Best to use HEX color instead of RGG, HSL, or valid color name. Time fade, color 3 and color 4 are optional. Time fade is how fast the transition between two colors. If time fade is empty, fade is set to be the same value as time tick. |
+| /light off|on|flash \(time tick\) \(time fade\) \(color\) | Set the light color of the server. There are 3 types, off, on and flash. Off will not accept anymore argument. On will only accept color argument. Flash accept time tick, fade (optional) and color. Time tick and fade is on millisecond. Color is better in HEX, but can use any type of color (RGB, HSL, Color Name)  |
 | /botadd | Add bot to your position, also fill the server. |
 | /botremove | Remove all bots created. |
 
