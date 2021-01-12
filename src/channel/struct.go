@@ -16,6 +16,7 @@ type Channel struct {
 	Players    cmap.ConcurrentMap
 	LastID     int
 	SkyColor   string
+	LightState string
 	Bots       []*player.Player
 
 	// Helper

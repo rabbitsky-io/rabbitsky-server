@@ -1,5 +1,11 @@
 # Rabbit Sky Server Changelog
 
+## Version 0.1.7
+- Add validation on /admin, so player cannot spam command /admin.
+- Add /light command for handling light state.
+- Add /size command for changing player size.
+- Change Bot behaviour for Debug.
+
 ## Version 0.1.6
 - Add detection to non-admin player if more or less than limit, user should be disconnected.
 - Add flag `-limit-position-max` and `limit-position-min` to support the detection.

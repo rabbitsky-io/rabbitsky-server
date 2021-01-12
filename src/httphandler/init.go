@@ -87,7 +87,7 @@ func Init(c *channel.Channel, ws *websocket.WebSocket, origin, serverPassword, p
 		WebSocket:      ws,
 		Origin:         origin,
 		ServerPassword: serverPassword,
-		MessageRegex:   regexp.MustCompile(`^(H(?P<H>[0-9]{1,3}))?(S(?P<S>[0-9]{1,3}))?(L(?P<L>[0-9]{1,3}))?(X(?P<X>\-?[0-9]+))?(Y(?P<Y>\-?[0-9]+))?(Z(?P<Z>\-?[0-9]+))?(x(?P<x>\-?[0-9]+))?(y(?P<y>\-?[0-9]+))?(z(?P<z>\-?[0-9]+))?(D(?P<D>(0|1)))?(C(?P<C>.*))?$`),
+		MessageRegex:   regexp.MustCompile(`^(B(?P<B>[1-9]))?(H(?P<H>[0-9]{1,3}))?(S(?P<S>[0-9]{1,3}))?(L(?P<L>[0-9]{1,3}))?(X(?P<X>\-?[0-9]+))?(Y(?P<Y>\-?[0-9]+))?(Z(?P<Z>\-?[0-9]+))?(x(?P<x>\-?[0-9]+))?(y(?P<y>\-?[0-9]+))?(z(?P<z>\-?[0-9]+))?(D(?P<D>(0|1)))?(C(?P<C>.*))?$`),
 
 		PositionLimitMin: &posMin,
 		PositionLimitMax: &posMax,

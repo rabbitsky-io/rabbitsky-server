@@ -9,6 +9,7 @@ type Player struct {
 	WebSocket  *websocket.WebSocketConn
 	IsAdmin    bool
 	Ready      bool
+	Size       int
 	ColorH     int
 	ColorS     int
 	ColorL     int
@@ -21,4 +22,5 @@ type Player struct {
 	IsDuck     bool
 	Chat       string
 	UpdateSent bool
+	AdminTry   int
 }

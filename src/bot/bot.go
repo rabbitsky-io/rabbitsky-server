@@ -45,7 +45,7 @@ func AddBot(c *rsChannel.Channel, maxBot, tick int) {
 
 	for ; true; <-ticker.C {
 		for i := 0; i < maxBot; i++ {
-			playerBot[i].PosX = playerBot[i].PosX + (25 - rand.Intn(50))
+			playerBot[i].PosX = playerBot[i].PosX + (10 - rand.Intn(20))
 			if playerBot[i].PosX > 4000 {
 				playerBot[i].PosX = 4000
 			}
@@ -54,7 +54,7 @@ func AddBot(c *rsChannel.Channel, maxBot, tick int) {
 			}
 
 			playerBot[i].PosY = rand.Intn(5) + 10
-			playerBot[i].PosZ = playerBot[i].PosZ + (25 - rand.Intn(50))
+			playerBot[i].PosZ = playerBot[i].PosZ + (10 - rand.Intn(20))
 			if playerBot[i].PosZ > 3000 {
 				playerBot[i].PosZ = 3000
 			}
@@ -62,7 +62,7 @@ func AddBot(c *rsChannel.Channel, maxBot, tick int) {
 				playerBot[i].PosZ = 0
 			}
 
-			if rand.Intn(25) == 0 {
+			if rand.Intn(100) == 0 {
 				playerBot[i].Chat = fmt.Sprintf("ye - %d", rand.Intn(50))
 			} else {
 				playerBot[i].Chat = ""
@@ -76,15 +76,12 @@ func AddBot(c *rsChannel.Channel, maxBot, tick int) {
 				playerBot[i].IsDuck = true
 			}
 
-			sendText := fmt.Sprintf("%s%s=X%dY%dZ%dx%dy%dz%dD%dC%s",
+			sendText := fmt.Sprintf("%s%s=X%dY%dZ%dD%dC%s",
 				rsHTTPHandler.SEND_PLAYER_UPDATE,
 				playerBot[i].ID,
 				playerBot[i].PosX,
 				playerBot[i].PosY,
 				playerBot[i].PosZ,
-				playerBot[i].LookX,
-				playerBot[i].LookY,
-				playerBot[i].LookZ,
 				isDuck,
 				playerBot[i].Chat,
 			)

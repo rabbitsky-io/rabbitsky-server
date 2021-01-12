@@ -213,8 +213,11 @@ func (h *HTTPHandler) ParseCommand(player *rsPlayer.Player, data map[string]stri
 	if len(command) > 0 {
 		switch command[0] {
 		case "/admin":
-			if len(command) > 1 && command[1] == h.ServerPassword {
+			if len(command) > 1 && player.AdminTry < 3 && command[1] == h.ServerPassword {
 				player.IsAdmin = true
+				player.SendMessage(SEND_PLAYER_ADMIN)
+			} else {
+				player.AdminTry++
 			}
 
 			break
@@ -226,6 +229,23 @@ func (h *HTTPHandler) ParseCommand(player *rsPlayer.Player, data map[string]stri
 				} else {
 					sendFly := fmt.Sprintf("%s%d", SEND_ALLOW_FLY, 0)
 					player.SendMessage(sendFly)
+				}
+			}
+
+			break
+		case "/size":
+			if player.IsAdmin && len(command) > 1 && command[1] != "" {
+				playerSize, err := strconv.Atoi(command[1])
+				if err != nil {
+					break
+				}
+
+				if playerSize > 0 && playerSize < 10 {
+					player.Size = playerSize
+					player.UpdateSent = true
+
+					broadcastMessage := fmt.Sprintf("%s%s=B%d", SEND_PLAYER_UPDATE, player.ID, player.Size)
+					h.Channel.AddBroadcastMessage(broadcastMessage)
 				}
 			}
 
@@ -262,6 +282,68 @@ func (h *HTTPHandler) ParseCommand(player *rsPlayer.Player, data map[string]stri
 
 				broadcastMessage := fmt.Sprintf("%s%s", SEND_SKY_COLOR, skySend)
 				h.Channel.AddBroadcastMessage(broadcastMessage)
+			}
+
+			break
+		case "/light":
+			if player.IsAdmin && len(command) > 1 {
+				lightState := strings.ToLower(command[1])
+				lightStateChanged := false
+				if lightState == "off" {
+					h.Channel.ChangeLightState("0")
+					lightStateChanged = true
+				} else if lightState == "on" {
+					stateNum := 1
+					stateColor := "default"
+
+					if len(command) > 2 {
+						stateColor = command[2]
+					}
+
+					h.Channel.ChangeLightState(fmt.Sprintf("%d%s", stateNum, stateColor))
+					lightStateChanged = true
+				} else if lightState == "flash" {
+					if len(command) < 3 {
+						break
+					}
+
+					stateNum := 2
+					stateColor := "default"
+
+					cmdInt, err := strconv.Atoi(command[2])
+					if err != nil {
+						break
+					}
+
+					stateFlashDelay := cmdInt
+					stateFlashFade := stateFlashDelay
+
+					if len(command) == 4 {
+						cmdInt, err = strconv.Atoi(command[3])
+						if err == nil {
+							stateFlashFade = cmdInt
+						} else {
+							stateColor = command[3]
+						}
+
+					} else if len(command) == 5 {
+						cmdInt, err = strconv.Atoi(command[3])
+						if err != nil {
+							break
+						}
+
+						stateFlashFade = cmdInt
+						stateColor = command[4]
+					}
+
+					h.Channel.ChangeLightState(fmt.Sprintf("%d%d,%d,%s", stateNum, stateFlashDelay, stateFlashFade, stateColor))
+					lightStateChanged = true
+				}
+
+				if lightStateChanged {
+					broadcastMessage := fmt.Sprintf("%s%s", SEND_LIGHT_STATE, h.Channel.GetLightState())
+					h.Channel.AddBroadcastMessage(broadcastMessage)
+				}
 			}
 
 			break
@@ -319,7 +401,7 @@ func (h *HTTPHandler) MessageInitPlayer(player *rsPlayer.Player, data map[string
 	}
 
 	for k, v := range data {
-		if k == "C" {
+		if k == "C" || k == "B" {
 			continue
 		}
 
@@ -452,9 +534,10 @@ func (h *HTTPHandler) SendInit(player *rsPlayer.Player) error {
 				isDuck = 1
 			}
 
-			sendText := fmt.Sprintf("%s%s=H%dS%dL%dX%dY%dZ%dx%dy%dz%dD%d",
+			sendText := fmt.Sprintf("%s%s=B%dH%dS%dL%dX%dY%dZ%dx%dy%dz%dD%d",
 				SEND_PLAYER_INIT,
 				playerObj.ID,
+				playerObj.Size,
 				playerObj.ColorH,
 				playerObj.ColorS,
 				playerObj.ColorL,
@@ -482,6 +565,15 @@ func (h *HTTPHandler) SendInit(player *rsPlayer.Player) error {
 		}
 
 		str.WriteString(fmt.Sprintf("%s%s", SEND_SKY_COLOR, skyColor))
+	}
+
+	lightState := h.Channel.GetLightState()
+	if lightState != "" {
+		if str.Len() > 0 {
+			str.WriteString("\n")
+		}
+
+		str.WriteString(fmt.Sprintf("%s%s", SEND_LIGHT_STATE, lightState))
 	}
 
 	player.SendMessage(str.String())
