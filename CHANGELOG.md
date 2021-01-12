@@ -2,6 +2,7 @@
 
 ## Version 0.1.7
 - Add validation on /admin, so player cannot spam command /admin.
+- Send "A" response when /admin password is success. ;)
 - Add /light command for handling light state.
 - Add /size command for changing player size.
 - Change Bot behaviour for Debug.
