@@ -1,0 +1,11 @@
+{
+    "serverPort":8080,
+    "serverTick":10,
+    "maxPlayers":100,
+    "origin":"https://demo.rabbitsky.io",
+    "limitPositionMin":"0,0,0",
+    "limitPositionMax":"4000,100,3000",
+    "defaultBotCount": 0,
+
+    "adminPassword":""
+}
